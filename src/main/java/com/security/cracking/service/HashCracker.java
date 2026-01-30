@@ -11,5 +11,6 @@ public interface HashCracker {
     boolean hasPassList(HashRequestDTO request);
     public boolean hasSalt(HashRequestDTO request);
     public boolean hasSaltList(HashRequestDTO request);
+    public String getSupportedHashType();
 
 }

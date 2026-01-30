@@ -64,4 +64,7 @@ public class BCryptCracker implements HashCracker {
         return false;
     }
 
+    @Override
+    public String getSupportedHashType(){ return "BCrypt";}
+
 }

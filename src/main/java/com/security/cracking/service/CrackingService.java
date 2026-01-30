@@ -25,6 +25,12 @@ public class CrackingService {
                 .orElse(fail(hashReq, "Hash not cracked"));
     }
 
+    public List<String>  getSupportedHashTypes() {
+       return crackers.stream()
+               .map(HashCracker::getSupportedHashType)
+               .toList();
+    }
+
     /**
      * Auxiliares
      */

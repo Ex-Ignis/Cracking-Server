@@ -78,4 +78,7 @@ public class Argon2Cracker implements HashCracker{
     public boolean hasSaltList(HashRequestDTO req){
         return false;
     }
+
+    @Override
+    public String getSupportedHashType(){ return "Argon2";}
 }
