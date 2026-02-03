@@ -20,14 +20,6 @@ public class CrackingController {
 
     @PostMapping("/hashcracking")
     public ResponseEntity<HashResponseDTO> hashCracking(@Valid @ModelAttribute HashRequestDTO hashReq) {
-
-        if ((hashReq.getPasswd() == null || hashReq.getPasswd().isBlank()) &&
-                (hashReq.getPassListF() == null || hashReq.getPassListF().isEmpty())) {
-
-            HashResponseDTO errorResp = new HashResponseDTO();
-            errorResp.setMessage("Password or PassList cant be empty");
-            return ResponseEntity.badRequest().body(errorResp);
-        }
             HashResponseDTO hashResp = crackingService.crackPasswd(hashReq);
             return ResponseEntity.ok().body(hashResp);
     }

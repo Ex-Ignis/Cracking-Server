@@ -2,11 +2,14 @@ package com.security.cracking.exception;
 
 import com.security.cracking.dto.ErrorResponseDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice //anotacion para interceptar excepciones
 public class GlobalExceptionHandler {
@@ -18,10 +21,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.internalServerError().body(errorRes);
     }
 
-    // TODO implementar @Valid en dto
     @ExceptionHandler(MethodArgumentNotValidException.class) // para los @Valid
     public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValidException(MethodArgumentNotValidException  manve){
-        return null;
+        ErrorResponseDTO error = new ErrorResponseDTO();
+        error.setError("Validation failed");
+        error.setMessage("Check Params");
+        error.setFieldErrors(manve.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        FieldError::getDefaultMessage,
+                        (msg1, msg2) -> msg1  // si duplicados, quedarse con el primero
+                )));
+        return ResponseEntity.badRequest().body(error);
     }
 
     @ExceptionHandler(IOException.class)
