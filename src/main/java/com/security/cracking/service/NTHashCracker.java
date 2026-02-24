@@ -15,12 +15,12 @@ import java.util.HexFormat;
 import java.util.Optional;
 
 /**
- *  128 bits (16 bytes)
- *  NTLM = MD4(UTF-16LE(password))
- *  usuario:rid:lm:ntlm
+ *  NT Hash (128 bits / 16 bytes) — el hash almacenado en SAM
+ *  NTHash = MD4(UTF-16LE(password))
+ *  Formato volcado SAM:  usuario:rid:lmHash:ntHash
  */
 @Component
-public class NTLMCracker implements HashCracker{
+public class NTHashCracker implements HashCracker{
 
     static {Security.addProvider(new BouncyCastleProvider());}
 
@@ -61,7 +61,7 @@ public class NTLMCracker implements HashCracker{
 
     @Override
     public boolean supports(String hashType) {
-        return "NTLM".equalsIgnoreCase(hashType);
+        return "NTHash".equalsIgnoreCase(hashType);
     }
 
     @Override
@@ -86,6 +86,6 @@ public class NTLMCracker implements HashCracker{
 
     @Override
     public String getSupportedHashType() {
-        return "NTLM";
+        return "NTHash";
     }
 }
