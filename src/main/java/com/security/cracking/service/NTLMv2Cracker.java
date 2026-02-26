@@ -62,8 +62,6 @@ public class NTLMv2Cracker implements HashCracker {
         return Optional.empty();
     }
 
-    // --------------------------------------------------------------- parsing
-
     private record NTLMv2Parts(String username, String domain,
                                byte[] serverChallenge, byte[] ntProofStr, byte[] blob) {}
 
@@ -72,8 +70,6 @@ public class NTLMv2Cracker implements HashCracker {
      *   username::domain:serverChallenge:ntProofStr:blob
      */
     private NTLMv2Parts parse(String raw) {
-        // Separamos por ":" pero el blob puede contener ":" en base64/hex largo
-        // El formato fijo tiene exactamente 6 campos, el 6o puede ser muy largo
         String[] parts = raw.split(":", 6);
         if (parts.length != 6) {
             throw new IllegalArgumentException(
@@ -89,8 +85,6 @@ public class NTLMv2Cracker implements HashCracker {
 
         return new NTLMv2Parts(username, domain, serverChallenge, ntProofStr, blob);
     }
-
-    // --------------------------------------------------------------- verify
 
     private boolean verify(String password, NTLMv2Parts parts) {
         try {
@@ -111,8 +105,6 @@ public class NTLMv2Cracker implements HashCracker {
             throw new RuntimeException("Error en verificacion NTLMv2", e);
         }
     }
-
-    // --------------------------------------------------------------- crypto
 
     private byte[] md4(byte[] input) {
         try {
@@ -139,8 +131,6 @@ public class NTLMv2Cracker implements HashCracker {
         System.arraycopy(b, 0, result, a.length, b.length);
         return result;
     }
-
-    // --------------------------------------------------------------- interface
 
     @Override
     public boolean supports(String hashType) {
